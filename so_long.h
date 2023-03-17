@@ -24,3 +24,21 @@ typedef struct t_data{
 
 
 #endif
+
+// int y = 0;
+// int x;
+// while(ptr[y])
+// {
+//     x = 0
+//     while(ptr[y][x])
+//     {
+//         if(ptr[y][x] != '1' && ptr[y][x] != '0' && ptr[y][x] != 'C' && ptr[y][x] != 'E' && ptr[y][x] != 'P')
+//         {
+//             write(kjhdfkjkglht);
+//             free ptr;
+//             exit(1)
+//         }
+//         x++;
+//     }
+//     y++;
+// }

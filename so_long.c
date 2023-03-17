@@ -21,6 +21,14 @@ void ft_1(char *s)
         exit (1);
     }
 }
+int	map_line(t_data data)
+{
+	data.count = 0;
+
+	while(data.ptr[data.count])
+		data.count++;
+	return (data.count);
+}
 
 char	check_map(t_data data)
 {
@@ -92,6 +100,56 @@ char	check_map(t_data data)
 	return (0);
 }
 
+char	check_characters(t_data data)
+{
+	int x;
+	int y;
+	int e_count;
+	int p_count;
+	int c_count;
+	
+	x = 0;
+	e_count = 0;
+	p_count = 0;
+	c_count = 0;
+	// for(int i = 0; i < 4; i++)
+	// 	printf("-%s-", data.ptr[i]);
+	
+	while (data.ptr[x])
+	{
+   	 	y = 0;
+    	while (data.ptr[x][y])
+    	{
+        	if(data.ptr[x][y] != '1' && data.ptr[x][y] != '0' && data.ptr[x][y] != 'C' 
+			&& data.ptr[x][y] != 'E' && data.ptr[x][y] != 'P' && data.ptr[x][y] != '\n')
+			{
+				// printf("%c -\n", data.ptr[x][y]);
+				puts("map non vali----------iiiiide");
+				// free (data.ptr);
+				exit (1);
+			}
+			else if (data.ptr[x][y] == 'E')
+                e_count++;
+			else if (data.ptr[x][y] == 'P')
+				p_count++;
+			else if (data.ptr[x][y] == 'C')
+				c_count++;				
+        y++;
+    	}
+    x++;
+	}
+	  if (e_count != 1 || p_count != 1)
+    {
+        puts("carte non valide");
+        exit(1);
+    }
+	if (c_count < 1)
+	{
+		puts("carte n'est pas valide");
+        exit(1);
+	}
+	return (0);
+}
 int	map_len(t_data data)
 {
 	int i;
@@ -100,49 +158,32 @@ int	map_len(t_data data)
 	
 	i = 0;
 	first_row_len = ft_strlen(data.ptr[0]);
+	  if (first_row_len == 0)
+    {
+        puts("la carte est vide");
+        exit(1);
+    }
 	while (data.ptr[i])
 	{
 		row_len = ft_strlen(data.ptr[i]);
-	if (data.ptr[i + 1] == NULL)
-	{
-		if (row_len + 1 != first_row_len)
+
+		if (data.ptr[i + 1] == NULL)
 		{
-			puts("last line");
-			exit(1);
+			if (row_len + 1 != first_row_len)
+			{
+				puts("last line");
+				exit(1);
+			}
 		}
-	}
-	else if (row_len != first_row_len)
-	{
-        puts("Map non valide");
-        exit (1);
-    }
-	if (row_len == 0)
-	{
-		puts("pas de map");
-		exit (1);
-	}
-	i++;
+		else if (row_len != first_row_len)
+		{
+			puts("Map non valide");
+			exit (1);
+		}
+		i++;
 	}
 	return (0);
 }
-// char	check_characters(t_data data)
-// {
-// 	int i;
-// 	int j;
-
-// 	while(data.ptr[i])
-// 	{
-// 		if ()
-// 		{
-// 			puts("map invalid");
-// 			exit(1);
-// 		}
-// 		i++;
-// 		j++;
-// 	}
-// 	return (0);
-// }
-
 char *get_next_line(int fd, t_data *data)
 {
 	char	str[1000000];
@@ -175,7 +216,7 @@ int main (int argc, char **argv)
 	data.ptr = ft_split(data.save, '\n');
 	if (!data.ptr)
 		return 0;
-	// printf("%c", check_characters(data));
 	map_len(data);
+	check_characters(data);
 	printf("%c", check_map(data));
 }
