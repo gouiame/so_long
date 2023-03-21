@@ -17,17 +17,17 @@ void ft_1(char *s)
         i++;
     if(s[i-1] != 'r' || s[i-2] != 'e' || s[i-3] != 'b' || s[i-4] != '.')
     {
-        write(1, "Error\nThe map does not end with .ber", 40);
+        write(1, "Error\nThe map does not end with .ber", 36);
         exit (1);
     }
 }
-int	map_line(t_data data)
+int	map_line(t_data *data)
 {
-	data.count = 0;
+	data->count = 0;
 
-	while(data.ptr[data.count])
-		data.count++;
-	return (data.count);
+	while(data->ptr[data->count])
+		data->count++;
+	return (data->count);
 }
 
 char	check_map(t_data data)
@@ -124,7 +124,7 @@ char	check_characters(t_data data)
 			&& data.ptr[x][y] != 'E' && data.ptr[x][y] != 'P' && data.ptr[x][y] != '\n')
 			{
 				// printf("%c -\n", data.ptr[x][y]);
-				puts("map non vali----------iiiiide");
+				puts("map non valiiiiiide");
 				// free (data.ptr);
 				exit (1);
 			}
@@ -150,32 +150,31 @@ char	check_characters(t_data data)
 	}
 	return (0);
 }
-int	map_len(t_data data)
+int	map_len(t_data *data)
 {
 	int i;
-	int first_row_len;
-	int	row_len;
+	int row_len;
 	
 	i = 0;
-	first_row_len = ft_strlen(data.ptr[0]);
-	  if (first_row_len == 0)
+	data->first_row_len = ft_strlen(data->ptr[0]);
+	  if (data->first_row_len == 0)
     {
         puts("la carte est vide");
         exit(1);
     }
-	while (data.ptr[i])
+	while (data->ptr[i])
 	{
-		row_len = ft_strlen(data.ptr[i]);
-
-		if (data.ptr[i + 1] == NULL)
+		row_len = ft_strlen(data->ptr[i]);
+		// printf("%d   - %s", data->first_row_len, data->ptr[i]);
+		if (data->ptr[i + 1] == NULL)
 		{
-			if (row_len + 1 != first_row_len)
+			if (row_len + 1 != data->first_row_len)
 			{
 				puts("last line");
 				exit(1);
 			}
 		}
-		else if (row_len != first_row_len)
+		else if (row_len != data->first_row_len)
 		{
 			puts("Map non valide");
 			exit (1);
@@ -205,18 +204,50 @@ char *get_next_line(int fd, t_data *data)
 	}
 	str[i] = '\0';
 	data->save = ft_strdup(str); 
+	//free(str);
 	return (NULL);
 }
+
+// void f()
+// {
+// 	system ("leaks a.out");
+// }
+
 int main (int argc, char **argv)
 {
+	t_data data;
+	//  atexit(f);
+	 int x = 0;
+	 int y = 0;
     int fd = open (argv[1], O_RDONLY );
     ft_1(argv[1]);
-	t_data data;
+	
+	
     get_next_line(fd, &data);
 	data.ptr = ft_split(data.save, '\n');
 	if (!data.ptr)
 		return 0;
-	map_len(data);
-	check_characters(data);
-	printf("%c", check_map(data));
+	map_len(&data);
+
+	// check_characters(data);
+	map_line(&data);
+	dup_map(&data);
+								// printf("%c\n\n", check_map(data));
+								// dup_map(&data);
+								// printf("%d", data.count);
+	for (int i = 0; i < data.count; i++)
+		printf("%s",data.map[i]);
+
+
+
+
+	// for (int i = 0; i < data.count; i++)
+	// 	printf("%s\n",data.map[i]);
+	// valid_path(data, x, y);
+	// int j = 0;
+	// while(data.ptr[j])
+	// {
+	// 	printf("%s", data.ptr[j]);
+	// 	j++;
+	// }
 }

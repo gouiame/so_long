@@ -9,7 +9,6 @@
 
 int	ft_strlen(char *str);
 char	*ft_strdup(char *s1);
-char	*ft_strjoin(char *p, char *buffer);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 static char	**free_memory(char **p);
 static size_t	words_counter(char *str, char c);
@@ -18,9 +17,13 @@ char	**ft_split(char *s, char c);
 typedef struct t_data{
     char **ptr;
     char *save;
+    char **map;
     int count;
-    int height;
+    int first_row_len;
 }t_data;
+int ft_check(t_data data, int x, int y);
+void valid_path(t_data data, int x, int y);
+void  dup_map(t_data *data);
 
 
 #endif

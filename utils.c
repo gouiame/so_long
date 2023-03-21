@@ -29,30 +29,30 @@ char	*ft_strdup(char *s1)
 	p[i] = '\0';
 	return (p);
 }
-char	*ft_strjoin(char *p, char *buffer)
-{
-	char	*result;
-	int		i;
-	int		j;
+// char	*ft_strjoin(char *p, char *buffer)
+// {
+// 	char	*result;
+// 	int		i;
+// 	int		j;
 
-	i = 0;
-	j = 0;
-	if (p == NULL)
-		p = ft_strdup("");
-	result = (char *)malloc (ft_strlen (p) + ft_strlen (buffer) + 1);
-	if (result == (NULL))
-		return (NULL);
-	while (p[i] != '\0')
-	{
-		result[i] = p[i];
-		i++;
-	}
-	while (buffer[j] != '\0')
-		result[i++] = buffer[j++];
-	result[ft_strlen(p) + ft_strlen(buffer)] = '\0';
-	free(p);
-	return (result);
-}
+// 	i = 0;
+// 	j = 0;
+// 	if (p == NULL)
+// 		p = ft_strdup("");
+// 	result = (char *)malloc (ft_strlen (p) + ft_strlen (buffer) + 1);
+// 	if (result == (NULL))
+// 		return (NULL);
+// 	while (p[i] != '\0')
+// 	{
+// 		result[i] = p[i];
+// 		i++;
+// 	}
+// 	while (buffer[j] != '\0')
+// 		result[i++] = buffer[j++];
+// 	result[ft_strlen(p) + ft_strlen(buffer)] = '\0';
+// 	free(p);
+// 	return (free(buffer),result);
+// }
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	char	*str;
