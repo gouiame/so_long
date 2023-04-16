@@ -1,21 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgouiame <cgouiame@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/14 22:02:22 by cgouiame          #+#    #+#             */
+/*   Updated: 2023/04/16 15:39:01 by cgouiame         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-static char	**free_memory(char **p)
+int	ft_strlen(char *str)
 {
-	size_t	n;
+	int	i;
 
-	n = 0;
-	while (p[n] != '\0')
-	{
-		free(p[n]);
-		n++;
-	}
-	free (p);
-	p = NULL;
-	return (p);
+	i = 0;
+	if (str == NULL)
+		return (0);
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
-static size_t	words_counter(char *str, char c)
+char	*ft_substr(char *s, int start, int len)
+{
+	char	*str;
+	int		i;
+	int		len_s;
+
+	i = 0;
+	if (s == NULL)
+		return (NULL);
+	len_s = ft_strlen(s);
+	if (start >= len_s)
+		return (ft_strdup(""));
+	if (ft_strlen(s + start) < len)
+		str = malloc(ft_strlen(s + start) * sizeof(char) + 1);
+	else
+		str = malloc(len * sizeof(char) + 1);
+	if (str == NULL )
+		return (NULL);
+	while (i < len && s[start + i])
+	{
+		str[i] = s[start + i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	**free_memory(char **p)
+{
+	int	i;
+
+	i = 0;
+	while (p[i])
+	{
+		free (p[i]);
+		i++;
+	}
+	free (p);
+	return (NULL);
+}
+
+size_t	words_counter(char *str, char c)
 {
 	size_t	counter;
 	int		i;
@@ -49,22 +99,14 @@ char	**ft_split(char *s, char c)
 		return (NULL);
 	while (i < words_counter(s, c) && s[j] != '\0')
 	{
-		if (s[0] == c)
-			return (NULL);
+		while (s[j] == c)
+			j++;
 		wordstart = j;
 		while (s[j] != c && s[j] != '\0')
-		{
-			if(s[j + 1] == c && s[j + 2] == c)
-				return NULL;
 			j++;
-		
-		}
-		j++;
 		split[i] = ft_substr(s, wordstart, j - wordstart);
 		if (split[i++] == NULL)
-		{
 			return (free_memory(split));
-		}
 	}
 	split[i] = NULL;
 	return (split);

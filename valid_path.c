@@ -6,121 +6,129 @@
 /*   By: cgouiame <cgouiame@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 18:26:29 by cgouiame          #+#    #+#             */
-/*   Updated: 2023/03/21 22:03:49 by cgouiame         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:44:07 by cgouiame         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void  dup_map(t_data *data)
+void	dup_map(t_data *s)
 {
-    int i;
-    int j;
+	int	i;
+	int	j;
 
-    data->map = (char **)malloc((data->count + 1) * sizeof(char *));
-	j = 0;
-    while(data->ptr[j])
-    {
-        i = 0;
-        data->map[j] = (char *)malloc((data->first_row_len + 1) * sizeof(char));
-      	while (data->ptr[j][i])
-		{
-			data->map[j][i] = data->ptr[j][i];
-			i++;
-		}
-		data->map[j][data->first_row_len] = '\0';
-		j++;
+	s->map = (char **)malloc((s->n + 1) * sizeof(char *));
+	if (s->map == NULL)
+	{
+		free_memory(s->map);
+		exit(1);
 	}
-	data->map[data->count] = NULL;
-
+	j = -1;
+	while (s->ptr[++j])
+	{
+		i = -1;
+		s->map[j] = (char *)malloc((s->len + 1) * sizeof(char));
+		if (s->map == NULL)
+		{
+			free_memory(s->map);
+			exit(1);
+		}
+		while (s->ptr[j][++i])
+			s->map[j][i] = s->ptr[j][i];
+		s->map[j][s->len] = '\0';
+	}
+	s->map[s->n] = NULL;
 }
 
-// int ft_check(t_data data, int x, int y)
-// {
-//     int c;
+int	ft_check(t_data *s, int x, int y)
+{
+	int	c;
 
-//     c = 0;
+	c = 0;
+	if (s->map[y][x + 1] == '0' || s->map[y][x + 1] == 'C')
+	{
+		s->map[y][x + 1] = 'P';
+		c = 1;
+	}
+	if (s->map[y][x - 1] == '0' || s->map[y][x - 1] == 'C')
+	{
+		s->map[y][x - 1] = 'P';
+		c = 1;
+	}
+	if (s->map[y + 1][x] == '0' || s->map[y + 1][x] == 'C')
+	{
+		s->map[y + 1][x] = 'P';
+		c = 1;
+	}
+	if (s->map[y - 1][x] == '0' || s->map[y - 1][x] == 'C')
+	{
+		s->map[y - 1][x] = 'P';
+		c = 1;
+	}
+	return (c);
+}
 
-//     if(data.ptr[y][x + 1] == '0' || data.ptr[y][x + 1] == 'C')
-//     {
-//         data.ptr[y][x + 1] = 'P';
-//         c = 1;
-//     }
-//     if(data.ptr[y][x - 1] == '0' || data.ptr[y][x - 1] == 'C')
-//     {
-//         data.ptr[y][x - 1] = 'P';
-//         c = 1;
-//     }
-//     if(data.ptr[y + 1][x] == '0' || data.ptr[y + 1][x] == 'C')
-//     {
-//         data.ptr[y + 1][x] = 'P';
-//         c = 1;
-//     }
-//     if(data.ptr[y - 1][x] == '0' || data.ptr[y - 1][x] == 'C')
-//     {
-//         data.ptr[y - 1][x] = 'P';
-//         c = 1;
-//     }
-//     return (c);
-// }
-// void valid_path(t_data data, int x, int y)
-// {
+void	valid_path(t_data *s)
+{
+	int	x;
+	int	y;
 
-//     y = 0;
-//     while(data.ptr[y])
-//     {
-//         x = 0;
-//         while(data.ptr[y][x])
-//         {
-//             if(data.ptr[y][x] == 'P' && ft_check(data, x, y) == 1)
-//             {
-//                 // data.ptr[y][x] = 'P';
-//                 x = 0;
-//                 y = 0;
-//             }
-//             x++;
-//         }
-//         y++;
-//     }
-// }
-// void valid_path(char **map, int *x, int *y)
-// {
-//     while(map[(*y)])
-//     {
-//         *x = 1;
-//         while(map[(*y)][*x])
-//         {
-//             if(map[*y][*x] == 'P')
-//                 return ;
-//             (*x)++;
-//         }
-//         (*y)++;
-//     }
-// }
+	dup_map(s);
+	y = 0;
+	while (s->map[y])
+	{
+		x = 0;
+		while (s->map[y][x])
+		{
+			if (s->map[y][x] == 'P' && ft_check(s, x, y) == 1)
+			{
+				x = 0;
+				y = 0;
+			}
+			x++;
+		}
+		y++;
+	}
+}
 
-// int main() 
-// {
-//     int i = 0;
-//     int x = 0;
-//     int y = 0;
-//     char **zone = malloc (sizeof(char *));
-//     while (i < 5)
-//     {
-//         zone[i++] = malloc(9);
-//     }
-//     zone[0] = ft_strdup("11111111");
-//     zone[1] = ft_strdup("10001001");
-//     zone[2] = ft_strdup("10P10001");
-//     zone[3] = ft_strdup("10110001");
-//     zone[4] = ft_strdup("11111111");
-//     zone[5] =NULL;
-//     while (1)
-//     {
-//         valid_path(zone, &x, &y);
-//         if (!ft_check(zone, y, x))
-//             break;
-//     }
-//     for (int i = 0; i < 5; ++i)
-// 		printf("%s\n", zone[i]);
-// 	return (0);
-// }
+void	check_valid(t_data *s, int x, int y)
+{
+	if (s->map[y][x] == 'E')
+	{
+		if (s->map[y][x + 1] != 'P' && s->map[y][x - 1] != 'P' &&
+				s->map[y + 1][x] != 'P' && s->map[y - 1][x] != 'P')
+		{
+			write (1, "Error\nPlayer won't reach the exit", 34);
+			free_memory(s->map);
+			free_memory(s->ptr);
+			exit(1);
+		}
+	}
+}
+
+void	check_dup_map(t_data *s)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (s->map[y])
+	{
+		x = 0;
+		while (s->map[y][x])
+		{
+			if (s->map[y][x] == 'C')
+			{
+				write (1, "Error\nPlayer won't reach all collectibles", 42);
+				free_memory(s->map);
+				free_memory(s->ptr);
+				exit(1);
+			}
+			if (s->map[y][x] == 'E')
+				check_valid(s, x, y);
+			x++;
+		}
+		y++;
+	}
+	free_memory(s->map);
+}

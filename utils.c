@@ -1,20 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgouiame <cgouiame@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/14 22:17:31 by cgouiame          #+#    #+#             */
+/*   Updated: 2023/04/16 00:39:59 by cgouiame         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-int	ft_strlen(char *str)
+void	map_line(t_data *s)
+{
+	int	y;
+
+	y = 0;
+	while (s->ptr[y])
+		y++;
+	s->n = y;
+}
+
+void	check_map(t_data *s)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (s->ptr[y])
+	{
+		x = 0;
+		while (s->ptr[y][x])
+		{
+			if (x == 0 || x == s->len - 1 || y == 0 || y == s->n - 1)
+			{
+				if (s->ptr[y][x] != '1')
+				{
+					free_memory(s->ptr);
+					write (1, "Error\nCheck walls", 18);
+					exit(1);
+				}
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void	check_map_line(t_data *s)
 {
 	int	i;
+	int	len;
 
 	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	len = ft_strlen(s->save);
+	while (s->save[i])
+	{
+		if (s->save[0] == '\n' || (s->save[i] == '\n'
+				&& s->save[i + 1] == '\n') || s->save[len - 1] == '\n')
+		{
+			write (1, "Error\nEmpty line", 17);
+			exit(1);
+		}
 		i++;
-	return (i);
+	}
 }
 
 char	*ft_strdup(char *s1)
 {
-	size_t	i;
+	int		i;
 	char	*p;
 
 	i = 0;
@@ -28,54 +83,4 @@ char	*ft_strdup(char *s1)
 	}
 	p[i] = '\0';
 	return (p);
-}
-// char	*ft_strjoin(char *p, char *buffer)
-// {
-// 	char	*result;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	if (p == NULL)
-// 		p = ft_strdup("");
-// 	result = (char *)malloc (ft_strlen (p) + ft_strlen (buffer) + 1);
-// 	if (result == (NULL))
-// 		return (NULL);
-// 	while (p[i] != '\0')
-// 	{
-// 		result[i] = p[i];
-// 		i++;
-// 	}
-// 	while (buffer[j] != '\0')
-// 		result[i++] = buffer[j++];
-// 	result[ft_strlen(p) + ft_strlen(buffer)] = '\0';
-// 	free(p);
-// 	return (free(buffer),result);
-// }
-char	*ft_substr(char *s, unsigned int start, size_t len)
-{
-	char	*str;
-	size_t	i;
-	size_t	len_s;
-
-	i = 0;
-	if (s == NULL)
-		return (NULL);
-	len_s = ft_strlen(s);
-	if (start >= len_s)
-		return (ft_strdup(""));
-	if (ft_strlen(s + start) < len)
-		str = malloc(ft_strlen(s + start) * sizeof(char) + 1);
-	else
-		str = malloc(len * sizeof(char) + 1);
-	if (str == NULL )
-		return (NULL);
-	while (i < len && s[start + i])
-	{
-		str[i] = s[start + i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
 }
